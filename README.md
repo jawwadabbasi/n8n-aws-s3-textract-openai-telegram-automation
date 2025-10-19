@@ -1,5 +1,5 @@
-n8n Receipt -> AI Categorizer -> Telegram Notifier (Local + Free Models)
-========================================================================
+AI-powered Business Receipt Parser using n8n, AWS Textract, AWS S3 bucket and Ollama (Local LLM)
+==================================================================================================
 
 Upload a receipt image -> store the receipt to aws s3 bucket -> extract fields with AWS Textract -> structure & categorize with Ollama (local LLM) -> send a friendly summary to Telegram. No paid LLMs required.
 
