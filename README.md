@@ -35,23 +35,22 @@ Prerequisites
 
 ⚙️ Install & Run
 ----------------
-1) 
-   npm install -g n8n
-   n8n
-   ```open in browser: http://localhost:5678```
+1) npm install -g n8n
+    n8n
+    ```open in browser: http://localhost:5678```
 
 2) Ollama
-   ollama pull llama3
-   ollama serve
+    ollama pull llama3
+    ollama serve
 
 3) AWS Credentials in n8n
-   Create credential named “AWS account” with Access Key, Secret, and Region (e.g., us-east-1).
+    Create credential named “AWS account” with Access Key, Secret, and Region (e.g., us-east-1).
 
 4) Telegram Bot + Chat ID
-   - Create bot via @BotFather -> get bot token
-   - Add bot to group
-   - Get chat ID via @getidsbot or getUpdates API
-   - Save chatId and bot token in Telegram credentials in n8n
+    - Create bot via @BotFather -> get bot token
+    - Add bot to group
+    - Get chat ID via @getidsbot or getUpdates API
+    - Save chatId and bot token in Telegram credentials in n8n
 
 Import the Workflow
 -----------------------
