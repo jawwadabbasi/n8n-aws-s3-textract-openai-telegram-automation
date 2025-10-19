@@ -1,0 +1,211 @@
+{
+  "name": "Upload Business Receipts",
+  "nodes": [
+    {
+      "parameters": {
+        "binaryPropertyName": "Receipt"
+      },
+      "type": "n8n-nodes-base.awsTextract",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        112
+      ],
+      "id": "",
+      "name": "AWS Textract",
+      "alwaysOutputData": true,
+      "credentials": {
+        "aws": {
+          "id": "",
+          "name": "AWS account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Upload Receipt",
+        "formDescription": "Upload on business receipts",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Receipt",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".jpeg, .png, .jpg",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -752,
+        112
+      ],
+      "id": "9ce229c9-6330-493f-bfa6-240941fd0f80",
+      "name": "Receipt Form",
+      "webhookId": "5a3fcb1f-386a-4509-abce-ef900a019d33",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:11434/api/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \n  \"model\": \"llama3\", \n  \"prompt\": \"You are an invoice parser. Extract a JSON with vendor, date, total (add the total and taxes), and currency, category and expense_type from this text. Categorize can be of: Food, Transportation, Office Supplies, Utilities, Entertainment, Other OR whatever you think is the right category. And expense_type can be Personal or Business. CURRENCY BY DEFAULT IS CAD\\n{{ JSON.stringify($items('AWS Textract')[0].json).replace(/\\\"/g, '\\\\\\\"') }}. ONLY RETURN JSON. NO OTHER MESSAGE. NO COMMENTS.\",\n  \"stream\": false \n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -304,
+        112
+      ],
+      "id": "801316af-7f80-41a6-b9a9-ab8141c88a0b",
+      "name": "AI Agent (Ollama)"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nimport re\n\nitem = items[0]\nresponse_text = item[\"json\"].get(\"response\", \"\").strip()\n\n# Try to extract the JSON block from Markdown fences\nmatch = re.search(r'```(?:json)?\\s*({[\\s\\S]*?})\\s*```', response_text)\n\nif match:\n    cleaned_json = match.group(1)\nelse:\n    # Fallback: try to find first { ... } block if no ```json``` present\n    match_brace = re.search(r'({[\\s\\S]*})', response_text)\n    cleaned_json = match_brace.group(1) if match_brace else \"{}\"\n\ntry:\n    parsed = json.loads(cleaned_json)\nexcept Exception as e:\n    parsed = {\n        \"error\": f\"Failed to parse Ollama response: {str(e)}\",\n        \"raw_response\": response_text,\n        \"cleaned_json_attempt\": cleaned_json\n    }\n\nreturn [{\"json\": parsed}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        112
+      ],
+      "id": "0266c047-93ae-46d7-8864-c1d28173e4a3",
+      "name": "Prettify results"
+    },
+    {
+      "parameters": {
+        "chatId": "[ADD CHAT ID HERE]",
+        "text": "=You just purchased from vendor {{ $json.vendor }} on {{ $json.date }}. The total was {{ $json.currency }}{{ $json.total }}. The AI has categorized this as {{ $json.category }}. Expense Type: {{ $json.expense_type }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        112
+      ],
+      "id": "6859622b-9e49-4ae7-b246-ecdc09e7a463",
+      "name": "Notify on Groupchat",
+      "webhookId": "",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "[YOUR S3 BUCKET NAME]",
+        "fileName": "={{ $json.Receipt.filename }}",
+        "binaryPropertyName": "Receipt",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsS3",
+      "typeVersion": 2,
+      "position": [
+        -528,
+        -96
+      ],
+      "id": "",
+      "name": "Store receipt",
+      "credentials": {
+        "aws": {
+          "id": "",
+          "name": "AWS account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AWS Textract": {
+      "main": [
+        [
+          {
+            "node": "AI Agent (Ollama)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receipt Form": {
+      "main": [
+        [
+          {
+            "node": "AWS Textract",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Store receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent (Ollama)": {
+      "main": [
+        [
+          {
+            "node": "Prettify results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prettify results": {
+      "main": [
+        [
+          {
+            "node": "Notify on Groupchat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify on Groupchat": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ab63e4d4-03b2-4ad0-81ee-eab17f0e5fca",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "39bcf5362060bfa1153ff93d0e8b60dc64a70059aac3ab6c3926746bb8826830"
+  },
+  "id": "6Nsqb2wYSBYll2gS",
+  "tags": []
+}
