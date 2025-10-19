@@ -5,6 +5,8 @@ Upload a receipt image -> store the receipt to aws s3 bucket -> extract fields w
 
 Note. You can easily replace Ollama with OpenAi as an alternative.
 
+![n8n Workflow Overview](./workflow.png)
+
 Features
 -----------
 - Upload .jpg/.jpeg/.png via n8n Form
