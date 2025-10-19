@@ -33,24 +33,38 @@ Prerequisites
 - Telegram bot + bot token + target chat/group ID
 - macOS/Linux/WSL; Firewall off or allowed for local calls
 
-⚙️ Install & Run
-----------------
-1) npm install -g n8n
-    n8n
-    ```open in browser: http://localhost:5678```
+## Install & Run
+---
 
-2) Ollama
-    ollama pull llama3
-    ollama serve
+### Install n8n
+```bash
+npm install -g n8n
+n8n
+```
+Then open in your browser:  
+[http://localhost:5678](http://localhost:5678)
 
-3) AWS Credentials in n8n
-    Create credential named “AWS account” with Access Key, Secret, and Region (e.g., us-east-1).
+---
 
-4) Telegram Bot + Chat ID
-    - Create bot via @BotFather -> get bot token
-    - Add bot to group
-    - Get chat ID via @getidsbot or getUpdates API
-    - Save chatId and bot token in Telegram credentials in n8n
+### Install Ollama (Local AI)
+```bash
+ollama pull llama3
+ollama serve
+```
+
+---
+
+### Configure AWS in n8n
+Create a credential named **“AWS account”** with:  
+- Access Key  
+- Secret Key  
+- Region (e.g., `us-east-1`)
+
+### Telegram Bot + Chat ID
+- Create bot via @BotFather -> get bot token
+- Add bot to group
+- Get chat ID via @getidsbot or getUpdates API
+- Save chatId and bot token in Telegram credentials in n8n
 
 Import the Workflow
 -----------------------
