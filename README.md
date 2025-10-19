@@ -15,14 +15,18 @@ Features
 - Send a smart summary to a Telegram group
 - All local-friendly: no OpenAI key needed though AWS account is needed
 
-Architecture
-----------------
+## Architecture
+---
+
+```
 n8n Form (file)
-    └─▶ AWS s3 bucket (to store receipt)
-    └─▶ AWS Textract (Analyze Expense)
-        └─▶ HTTP Request -> Ollama (localhost:11434/api/generate)
-             └─▶ Code (Python) -> parse JSON from model
-                  └─▶ Telegram Send Message (group chat)
+    └──▶ AWS S3 Bucket (Store Receipt)
+    └──▶ AWS Textract (Analyze Expense)
+        └──▶ HTTP Request → Ollama (localhost:11434/api/generate)
+            └──▶ Code (Python) → Parse JSON from Model
+                └──▶ Telegram Send Message (Group Chat)
+```
+
 
 Prerequisites
 ----------------
