@@ -35,10 +35,10 @@ Prerequisites
 
 ⚙️ Install & Run
 ----------------
-1) n8n
+1) 
    npm install -g n8n
    n8n
-   # open: http://localhost:5678
+   ```open in browser: http://localhost:5678```
 
 2) Ollama
    ollama pull llama3
@@ -55,10 +55,10 @@ Prerequisites
 
 Import the Workflow
 -----------------------
-Import the JSON in n8n and replace these placeholders:
-- REPLACE_ME_AWS_CRED_ID -> your AWS credential ID
-- REPLACE_ME_TELEGRAM_CRED_ID -> your Telegram credential ID
-- REPLACE_ME_CHAT_ID -> your Telegram chat/group ID
+Import the JSON in n8n and replace placeholders with the correct credentials:
+- your AWS credential ID
+- your Telegram credential ID
+- your Telegram chat/group ID
 
 Run It
 ----------
@@ -73,7 +73,7 @@ Total: CAD23.19. Category: Groceries. Expense Type: Personal
 
 Security & Notes
 -------------------
-- Use http://127.0.0.1:11434 for Ollama (not localhost).
+- Use http://127.0.0.1:11434 for Ollama (not http://localhost:11434).
 - Add Basic Auth to n8n in production.
 - For PDFs, use S3 or Textract PDF operation.
 
@@ -103,7 +103,7 @@ Kodelle Inc. and Jawwad Ahmed Abbasi assume no responsibility for security misco
 
 License
 -----------
-Proprietary License – All Rights Reserved
+Proprietary License - All Rights Reserved
 © 2025 Jawwad Ahmed Abbasi, Kodelle Inc.
 
 This project is protected under a proprietary license.
