@@ -7,6 +7,14 @@ Note. You can easily replace Ollama with OpenAi as an alternative.
 
 ![n8n Workflow Overview](./workflow.jpg)
 
+---
+
+## Watch Project Overview
+
+[![Watch on YouTube](https://img.youtube.com/vi/cmCKLKDLEeY/0.jpg)](https://www.youtube.com/watch?v=cmCKLKDLEeY)
+
+---
+
 Features
 -----------
 - Upload .jpg/.jpeg/.png via n8n Form
