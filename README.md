@@ -136,3 +136,10 @@ You may view and learn from the source code for educational or portfolio purpose
 but commercial use, modification, or redistribution requires a paid license or written permission.
 
 For licensing or commercial use inquiries: jawwad@kodelle.com
+
+---
+
+## Author
+**Jawwad Ahmed Abbasi**  
+Senior Software Developer  
+[GitHub](https://github.com/jawwadabbasi) | [YouTube](https://www.youtube.com/@jawwad_abbasi)
